@@ -61,6 +61,26 @@
 
     };
 
+    exports.validNTPServerStratum = function (test) {
+        ntpClient.getNetworkTime(ntpClient.defaultNtpServer, ntpClient.defaultNtpPort, function (err, date, stratum) {
+            console.log();
+            console.log("System reported : %s", new Date());
+
+            test.ok(err === null);
+            test.ok(date !== null);
+            test.ok(stratum !== null);
+            test.ok(stratum >= 0);
+
+            console.log("NTP Reported : %s", date);
+            console.log("Stratum Reported : %s", stratum);
+
+            // I won't test returned datetime against the system datetime
+            // this is the whole purpose of NTP : putting clocks in sync.
+            test.done();
+        });
+
+    };    
+
     exports.invalidNTPServer = function (test) {
         // I'm pretty sure there is no NTP Server listening at google.com
         ntpClient.getNetworkTime("google.com", 123, function (err, date) {
